@@ -54,7 +54,7 @@ RUN { \
     echo 'exec "$@"'; \
 } > /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
-ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+ENTRYPOINT ["entrypoint.sh"]
 
 ENV SVN_APPDIR /
 ENV SVN_REPOSITORY dev
@@ -66,4 +66,4 @@ VOLUME /svn
 EXPOSE 80
 EXPOSE 443
 
-CMD ["/usr/sbin/httpd", "-DFOREGROUND"]
+CMD ["httpd", "-DFOREGROUND"]
