@@ -15,7 +15,7 @@ RUN yum -y install httpd mod_ssl mod_dav_svn; yum clean all
 RUN echo '' > /var/www/html/index.html
 
 # prevent error AH00558 on stdout
-RUN echo 'ServerName $HOSTNAME' >> /etc/httpd/conf.d/additional.conf
+RUN echo 'ServerName ${HOSTNAME}' >> /etc/httpd/conf.d/additional.conf
 
 # logging
 RUN echo 'CustomLog /dev/stdout "%t %h %u %U %{SVN-ACTION}e" env=SVN-ACTION' >> /etc/httpd/conf.d/additional.conf
