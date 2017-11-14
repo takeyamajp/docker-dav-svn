@@ -26,7 +26,7 @@ RUN mkdir /svn
 RUN { \
     echo '#!/bin/bash -eu'; \
     echo '{'; \
-    echo '    echo "<Location $SVN_SUBDIR>";'; \
+    echo '    echo "<Location ${SVN_APPDIR}>";'; \
     echo '    echo "    Dav svn";'; \
     echo '    echo "    SVNParentPath /svn";'; \
     echo '    echo "    SVNListParentPath on";'; \
@@ -37,18 +37,18 @@ RUN { \
     echo '    echo "    AuthzSVNAccessFile /svn/access";'; \
     echo '    echo "</Location>";'; \
     echo '} > /etc/httpd/conf.d/subversion.conf'; \
-    echo 'if [ ! -e /svn/$SVN_REPOSITORY ]; then'; \
-    echo '    svnadmin create /svn/$SVN_REPOSITORY'; \
+    echo 'if [ ! -e /svn/${SVN_REPOSITORY} ]; then'; \
+    echo '    svnadmin create /svn/${SVN_REPOSITORY}'; \
     echo 'fi'; \
     echo 'chown -R apache:apache /svn'; \
     echo 'if [ ! -e /svn/passwd ]; then'; \
-    echo '    htpasswd -b -m -c /svn/passwd $SVN_USER $SVN_PASSWORD'; \
+    echo '    htpasswd -b -m -c /svn/passwd ${SVN_USER} ${SVN_PASSWORD}'; \
     echo 'fi'; \
     echo 'if [ ! -e /svn/access ]; then'; \
     echo '    {'; \
     echo '        echo "[/]";'; \
     echo '        echo "* = r";'; \
-    echo '        echo "$SVN_USER = rw";'; \
+    echo '        echo "${SVN_USER} = rw";'; \
     echo '    } > /svn/access'; \
     echo 'fi'; \
     echo 'exec "$@"'; \
@@ -56,7 +56,7 @@ RUN { \
 RUN chmod +x /usr/local/bin/entrypoint.sh
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 
-ENV SVN_SUBDIR /
+ENV SVN_APPDIR /
 ENV SVN_REPOSITORY dev
 ENV SVN_USER user
 ENV SVN_PASSWORD user
