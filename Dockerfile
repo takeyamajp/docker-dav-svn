@@ -26,33 +26,33 @@ RUN mkdir /svn
 RUN { \
     echo '#!/bin/bash -eu'; \
     echo '{'; \
-    echo '    echo "<Location ${SVN_APPDIR}>";'; \
-    echo '    echo "    Dav svn";'; \
-    echo '    echo "    SVNParentPath /svn";'; \
-    echo '    echo "    SVNListParentPath on";'; \
-    echo '    echo "    AuthType Basic";'; \
-    echo '    echo "    AuthName '\''Subversion repository'\''";'; \
-    echo '    echo "    AuthUserFile /svn/passwd";'; \
-    echo '    echo "    Require valid-user";'; \
-    echo '    echo "    AuthzSVNAccessFile /svn/access";'; \
-    echo '    echo "</Location>";'; \
+    echo '  echo "<Location ${SVN_APPDIR}>";'; \
+    echo '  echo "    Dav svn";'; \
+    echo '  echo "    SVNParentPath /svn";'; \
+    echo '  echo "    SVNListParentPath on";'; \
+    echo '  echo "    AuthType Basic";'; \
+    echo '  echo "    AuthName '\''Subversion repository'\''";'; \
+    echo '  echo "    AuthUserFile /svn/passwd";'; \
+    echo '  echo "    Require valid-user";'; \
+    echo '  echo "    AuthzSVNAccessFile /svn/access";'; \
+    echo '  echo "</Location>";'; \
     echo '} > /etc/httpd/conf.d/subversion.conf'; \
     echo 'if [ ! -e /svn/${SVN_REPOSITORY} ]; then'; \
-    echo '    svnadmin create /svn/${SVN_REPOSITORY}'; \
+    echo '  svnadmin create /svn/${SVN_REPOSITORY}'; \
     echo 'fi'; \
     echo 'chown -R apache:apache /svn'; \
     echo 'if [ ! -e /svn/passwd ]; then'; \
-    echo '    htpasswd -b -m -c /svn/passwd ${SVN_USER} ${SVN_PASSWORD}'; \
+    echo '  htpasswd -b -m -c /svn/passwd ${SVN_USER} ${SVN_PASSWORD}'; \
     echo 'fi'; \
     echo 'if [ ! -e /svn/access ]; then'; \
-    echo '    {'; \
-    echo '        echo "[/]";'; \
-    echo '        echo "* = r";'; \
-    echo '        echo "${SVN_USER} = rw";'; \
-    echo '    } > /svn/access'; \
+    echo '  {'; \
+    echo '    echo "[/]";'; \
+    echo '    echo "* = r";'; \
+    echo '    echo "${SVN_USER} = rw";'; \
+    echo '  } > /svn/access'; \
     echo 'fi'; \
     echo 'exec "$@"'; \
-} > /usr/local/bin/entrypoint.sh
+    } > /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 ENTRYPOINT ["entrypoint.sh"]
 
