@@ -27,14 +27,14 @@ RUN { \
     echo '#!/bin/bash -eu'; \
     echo '{'; \
     echo '  echo "<Location ${SVN_APPDIR}>";'; \
-    echo '  echo "    Dav svn";'; \
-    echo '  echo "    SVNParentPath /svn";'; \
-    echo '  echo "    SVNListParentPath on";'; \
-    echo '  echo "    AuthType Basic";'; \
-    echo '  echo "    AuthName '\''Subversion repository'\''";'; \
-    echo '  echo "    AuthUserFile /svn/passwd";'; \
-    echo '  echo "    Require valid-user";'; \
-    echo '  echo "    AuthzSVNAccessFile /svn/access";'; \
+    echo '  echo "  Dav svn";'; \
+    echo '  echo "  SVNParentPath /svn";'; \
+    echo '  echo "  SVNListParentPath on";'; \
+    echo '  echo "  AuthType Basic";'; \
+    echo '  echo "  AuthName '\''Subversion repository'\''";'; \
+    echo '  echo "  AuthUserFile /svn/passwd";'; \
+    echo '  echo "  Require valid-user";'; \
+    echo '  echo "  AuthzSVNAccessFile /svn/access";'; \
     echo '  echo "</Location>";'; \
     echo '} > /etc/httpd/conf.d/subversion.conf'; \
     echo 'if [ ! -e /svn/${SVN_REPOSITORY} ]; then'; \
