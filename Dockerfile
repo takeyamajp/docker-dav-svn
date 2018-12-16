@@ -2,28 +2,28 @@ FROM centos
 MAINTAINER "Hiroki Takeyama"
 
 # timezone
-RUN rm -f /etc/localtime
-RUN ln -fs /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
+RUN rm -f /etc/localtime; \
+   ln -fs /usr/share/zoneinfo/Asia/Tokyo /etc/localtime;
 
 # svn
-RUN yum -y install svn; yum clean all
+RUN yum -y install svn; yum clean all;
 
 # httpd
-RUN yum -y install httpd mod_ssl mod_dav_svn; yum clean all
+RUN yum -y install httpd mod_ssl mod_dav_svn; yum clean all;
 
 # dummy html file
-RUN echo '' > /var/www/html/index.html
+RUN echo '' > /var/www/html/index.html;
 
 # prevent error AH00558 on stdout
-RUN echo 'ServerName ${HOSTNAME}' >> /etc/httpd/conf.d/additional.conf
+RUN echo 'ServerName ${HOSTNAME}' >> /etc/httpd/conf.d/additional.conf;
 
 # logging
-RUN echo 'CustomLog /dev/stdout "%t %h %u %U %{SVN-ACTION}e" env=SVN-ACTION' >> /etc/httpd/conf.d/additional.conf
-RUN echo 'ErrorLog /dev/stderr' >> /etc/httpd/conf.d/additional.conf
+RUN echo 'CustomLog /dev/stdout "%t %h %u %U %{SVN-ACTION}e" env=SVN-ACTION' >> /etc/httpd/conf.d/additional.conf; \
+    echo 'ErrorLog /dev/stderr' >> /etc/httpd/conf.d/additional.conf;
 
 # entrypoint
-RUN mkdir /svn
-RUN { \
+RUN mkdir /svn; \
+    { \
     echo '#!/bin/bash -eu'; \
     echo '{'; \
     echo '  echo "<Location ${SVN_APPDIR}>";'; \
@@ -52,8 +52,8 @@ RUN { \
     echo '  } > /svn/access'; \
     echo 'fi'; \
     echo 'exec "$@"'; \
-    } > /usr/local/bin/entrypoint.sh
-RUN chmod +x /usr/local/bin/entrypoint.sh
+    } > /usr/local/bin/entrypoint.sh; \
+    chmod +x /usr/local/bin/entrypoint.sh;
 ENTRYPOINT ["entrypoint.sh"]
 
 ENV SVN_APPDIR /
