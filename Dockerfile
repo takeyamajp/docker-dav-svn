@@ -42,7 +42,7 @@ RUN mkdir /svn; \
     echo 'fi'; \
     echo 'chown -R apache:apache /svn'; \
     echo 'if [ ! -e /svn/passwd ]; then'; \
-    echo '  htpasswd -b -m -c /svn/passwd ${SVN_USER} ${SVN_PASSWORD} > /dev/null'; \
+    echo '  htpasswd -bmc /svn/passwd ${SVN_USER} ${SVN_PASSWORD} &>/dev/null'; \
     echo 'fi'; \
     echo 'if [ ! -e /svn/access ]; then'; \
     echo '  {'; \
