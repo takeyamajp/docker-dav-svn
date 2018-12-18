@@ -1,3 +1,12 @@
-FROM centos
-
+FROM centos  
 MAINTAINER "Hiroki Takeyama"
+
+ENV SVN_APPDIR /  
+ENV SVN_REPOSITORY dev  
+ENV SVN_USER user  
+ENV SVN_PASSWORD user
+
+VOLUME /svn
+
+EXPOSE 80  
+EXPOSE 443
