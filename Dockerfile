@@ -40,7 +40,6 @@ RUN mkdir /svn; \
     echo 'if [ ! -e /svn/${SVN_REPOSITORY} ]; then'; \
     echo '  svnadmin create /svn/${SVN_REPOSITORY}'; \
     echo 'fi'; \
-    echo 'chown -R apache:apache /svn'; \
     echo 'if [ ! -e /svn/passwd ]; then'; \
     echo '  htpasswd -bmc /svn/passwd ${SVN_USER} ${SVN_PASSWORD} &>/dev/null'; \
     echo 'fi'; \
@@ -51,6 +50,7 @@ RUN mkdir /svn; \
     echo '    echo "${SVN_USER} = rw";'; \
     echo '  } > /svn/access'; \
     echo 'fi'; \
+    echo 'chown -R apache:apache /svn'; \
     echo 'exec "$@"'; \
     } > /usr/local/bin/entrypoint.sh; \
     chmod +x /usr/local/bin/entrypoint.sh;
