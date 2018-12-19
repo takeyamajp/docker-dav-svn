@@ -11,9 +11,6 @@ RUN yum -y install svn; yum clean all;
 # httpd
 RUN yum -y install httpd mod_ssl mod_dav_svn; yum clean all;
 
-# dummy html file
-RUN echo '' > /var/www/html/index.html;
-
 # prevent error AH00558 on stdout
 RUN echo 'ServerName ${HOSTNAME}' >> /etc/httpd/conf.d/additional.conf;
 
