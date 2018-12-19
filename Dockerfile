@@ -26,12 +26,13 @@ RUN mkdir /svn; \
     { \
     echo '#!/bin/bash -eu'; \
     echo '{'; \
-    echo '  echo "<Location ${SVN_APPDIR}>";'; \
+    echo '  echo "<Location />";'; \
     echo '  echo "  Dav svn";'; \
+    echo '  echo "  SSLRequireSSL";'; \
     echo '  echo "  SVNParentPath /svn";'; \
     echo '  echo "  SVNListParentPath on";'; \
     echo '  echo "  AuthType Basic";'; \
-    echo '  echo "  AuthName '\''Subversion repository'\''";'; \
+    echo '  echo "  AuthName '\''Basic Authentication'\''";'; \
     echo '  echo "  AuthUserFile /svn/passwd";'; \
     echo '  echo "  Require valid-user";'; \
     echo '  echo "  AuthzSVNAccessFile /svn/access";'; \
@@ -56,7 +57,6 @@ RUN mkdir /svn; \
     chmod +x /usr/local/bin/entrypoint.sh;
 ENTRYPOINT ["entrypoint.sh"]
 
-ENV SVN_APPDIR /
 ENV SVN_REPOSITORY dev
 ENV SVN_USER user
 ENV SVN_PASSWORD user
