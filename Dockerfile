@@ -43,9 +43,9 @@ RUN mkdir /svn; \
     echo 'fi'; \
     echo 'if [ ! -e /svn/access ]; then'; \
     echo '  {'; \
-    echo '    echo "[/]";'; \
-    echo '    echo "* = r";'; \
-    echo '    echo "${SVN_USER} = rw";'; \
+    echo '  echo "[/]";'; \
+    echo '  echo "* = r";'; \
+    echo '  echo "${SVN_USER} = rw";'; \
     echo '  } > /svn/access'; \
     echo 'fi'; \
     echo 'chown -R apache:apache /svn'; \
