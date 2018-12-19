@@ -3,7 +3,7 @@ MAINTAINER "Hiroki Takeyama"
 
 # timezone
 RUN rm -f /etc/localtime; \
-   ln -fs /usr/share/zoneinfo/Asia/Tokyo /etc/localtime;
+    ln -fs /usr/share/zoneinfo/Asia/Tokyo /etc/localtime;
 
 # svn
 RUN yum -y install svn; yum clean all;
