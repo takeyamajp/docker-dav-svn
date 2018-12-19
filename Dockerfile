@@ -9,7 +9,20 @@ RUN rm -f /etc/localtime; \
 RUN yum -y install svn; yum clean all;
 
 # httpd
-RUN yum -y install httpd mod_ssl mod_dav_svn; yum clean all;
+RUN yum -y install httpd mod_ssl mod_dav_svn; yum clean all; \
+    { \
+    echo '<Location />'; \
+    echo '  Dav svn'; \
+    echo '  SSLRequireSSL'; \
+    echo '  SVNParentPath /svn'; \
+    echo '  SVNListParentPath on'; \
+    echo '  AuthType Basic'; \
+    echo '  AuthName "Basic Authentication"'; \
+    echo '  AuthUserFile /svn/passwd'; \
+    echo '  Require valid-user'; \
+    echo '  AuthzSVNAccessFile /svn/access'; \
+    echo '</Location>'; \
+    } >> /etc/httpd/conf.d/additional.conf;
 
 # prevent error AH00558 on stdout
 RUN echo 'ServerName ${HOSTNAME}' >> /etc/httpd/conf.d/additional.conf;
@@ -22,19 +35,6 @@ RUN echo 'CustomLog /dev/stdout "%t %h %u %U %{SVN-ACTION}e" env=SVN-ACTION' >> 
 RUN mkdir /svn; \
     { \
     echo '#!/bin/bash -eu'; \
-    echo '{'; \
-    echo '  echo "<Location />";'; \
-    echo '  echo "  Dav svn";'; \
-    echo '  echo "  SSLRequireSSL";'; \
-    echo '  echo "  SVNParentPath /svn";'; \
-    echo '  echo "  SVNListParentPath on";'; \
-    echo '  echo "  AuthType Basic";'; \
-    echo '  echo "  AuthName '\''Basic Authentication'\''";'; \
-    echo '  echo "  AuthUserFile /svn/passwd";'; \
-    echo '  echo "  Require valid-user";'; \
-    echo '  echo "  AuthzSVNAccessFile /svn/access";'; \
-    echo '  echo "</Location>";'; \
-    echo '} > /etc/httpd/conf.d/subversion.conf'; \
     echo 'if [ ! -e /svn/${SVN_REPOSITORY} ]; then'; \
     echo '  svnadmin create /svn/${SVN_REPOSITORY}'; \
     echo 'fi'; \
