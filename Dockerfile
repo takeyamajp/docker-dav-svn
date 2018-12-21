@@ -40,7 +40,7 @@ RUN mkdir /svn; \
     echo 'if [ ${REQUIRE_SSL,,} = "true" ]; then'; \
     echo '  {'; \
     echo '  echo "<Location />"'; \
-    echo '  echo "SSLRequireSSL"'; \
+    echo '  echo "  SSLRequireSSL"'; \
     echo '  echo "</Location>"'; \
     echo '  } > /etc/httpd/conf.d/require_ssl.conf'; \
     echo 'fi'; \
