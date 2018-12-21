@@ -13,7 +13,6 @@ RUN yum -y install httpd mod_ssl mod_dav_svn; yum clean all; \
     { \
     echo '<Location />'; \
     echo '  Dav svn'; \
-    echo '  SSLRequireSSL'; \
     echo '  SVNParentPath /svn'; \
     echo '  SVNListParentPath on'; \
     echo '  AuthType Basic'; \
@@ -35,6 +34,16 @@ RUN echo 'CustomLog /dev/stdout "%t %h %u %U %{SVN-ACTION}e" env=SVN-ACTION' >> 
 RUN mkdir /svn; \
     { \
     echo '#!/bin/bash -eu'; \
+    echo 'if [ -e /etc/httpd/conf.d/require_ssl.conf ]; then'; \
+    echo '  rm -f /etc/httpd/conf.d/require_ssl.conf'; \
+    echo 'fi'; \
+    echo 'if [ ${REQUIRE_SSL,,} = "true" ]; then'; \
+    echo '  {'; \
+    echo '  echo "<Location />"'; \
+    echo '  echo "SSLRequireSSL"'; \
+    echo '  echo "</Location>"'; \
+    echo '  } > /etc/httpd/conf.d/require_ssl.conf'; \
+    echo 'fi'; \
     echo 'if [ ! -e /svn/${SVN_REPOSITORY} ]; then'; \
     echo '  svnadmin create /svn/${SVN_REPOSITORY}'; \
     echo 'fi'; \
@@ -53,6 +62,8 @@ RUN mkdir /svn; \
     } > /usr/local/bin/entrypoint.sh; \
     chmod +x /usr/local/bin/entrypoint.sh;
 ENTRYPOINT ["entrypoint.sh"]
+
+ENV REQUIRE_SSL true
 
 ENV SVN_REPOSITORY dev
 ENV SVN_USER user
