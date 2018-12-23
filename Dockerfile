@@ -34,15 +34,15 @@ RUN echo 'CustomLog /dev/stdout "%t %h %u %U %{SVN-ACTION}e" env=SVN-ACTION' >> 
 RUN mkdir /svn; \
     { \
     echo '#!/bin/bash -eu'; \
-    echo 'if [ -e /etc/httpd/conf.d/require_ssl.conf ]; then'; \
-    echo '  rm -f /etc/httpd/conf.d/require_ssl.conf'; \
+    echo 'if [ -e /etc/httpd/conf.d/requireSsl.conf ]; then'; \
+    echo '  rm -f /etc/httpd/conf.d/requireSsl.conf'; \
     echo 'fi'; \
     echo 'if [ ${REQUIRE_SSL,,} = "true" ]; then'; \
     echo '  {'; \
     echo '  echo "<Location />"'; \
     echo '  echo "  SSLRequireSSL"'; \
     echo '  echo "</Location>"'; \
-    echo '  } > /etc/httpd/conf.d/require_ssl.conf'; \
+    echo '  } > /etc/httpd/conf.d/requireSsl.conf'; \
     echo 'fi'; \
     echo 'if [ ! -e /svn/${SVN_REPOSITORY} ]; then'; \
     echo '  svnadmin create /svn/${SVN_REPOSITORY}'; \
