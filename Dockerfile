@@ -9,7 +9,9 @@ RUN rm -f /etc/localtime; \
 RUN yum -y install svn; yum clean all;
 
 # httpd
-RUN yum -y install httpd mod_ssl mod_dav_svn; yum clean all; \
+RUN yum -y install system-logos openssl mailcap; yum clean all; \
+    yum -y install "https://centos7.iuscommunity.org/ius-release.rpm"; yum clean all; \
+    yum -y install --disablerepo=base,extras,updates --enablerepo=ius httpd mod_ssl mod_dav_svn; yum clean all; \
     { \
     echo '<Location />'; \
     echo '  Dav svn'; \
