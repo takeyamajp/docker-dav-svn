@@ -1,10 +1,6 @@
 FROM centos
 MAINTAINER "Hiroki Takeyama"
 
-# timezone
-RUN rm -f /etc/localtime; \
-    ln -fs /usr/share/zoneinfo/Asia/Tokyo /etc/localtime;
-
 # svn
 RUN yum -y install svn; yum clean all;
 
@@ -34,6 +30,8 @@ RUN echo 'CustomLog /dev/stdout "%t %h %u %U %{SVN-ACTION}e" env=SVN-ACTION' >> 
 RUN mkdir /svn; \
     { \
     echo '#!/bin/bash -eu'; \
+    echo 'rm -f /etc/localtime'; \
+    echo 'ln -fs /usr/share/zoneinfo/${TIMEZONE} /etc/localtime'; \
     echo 'if [ -e /etc/httpd/conf.d/requireSsl.conf ]; then'; \
     echo '  rm -f /etc/httpd/conf.d/requireSsl.conf'; \
     echo 'fi'; \
@@ -62,6 +60,8 @@ RUN mkdir /svn; \
     } > /usr/local/bin/entrypoint.sh; \
     chmod +x /usr/local/bin/entrypoint.sh;
 ENTRYPOINT ["entrypoint.sh"]
+
+ENV TIMEZONE Asia/Tokyo
 
 ENV REQUIRE_SSL true
 
