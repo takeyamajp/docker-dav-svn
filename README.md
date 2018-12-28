@@ -1,6 +1,8 @@
 FROM centos  
 MAINTAINER "Hiroki Takeyama"
 
+ENV TIMEZONE Asia/Tokyo
+
 ENV REQUIRE_SSL true
 
 ENV SVN_REPOSITORY dev  
