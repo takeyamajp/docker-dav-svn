@@ -42,21 +42,6 @@ RUN mkdir /svn; \
     echo '  echo "</Location>"'; \
     echo '  } > /etc/httpd/conf.d/requireSsl.conf'; \
     echo 'fi'; \
-    echo 'if [ -e /svn/.htaccess ]; then'; \
-    echo '  sed -i '\''/^# BEGIN ENABLE GZIP COMPRESSION$/,/^# END ENABLE GZIP COMPRESSION$/d'\'' /svn/.htaccess'; \
-    echo 'fi'; \
-    echo 'if [ ${ENABLE_GZIP_COMPRESSION,,} = "true" ]; then'; \
-    echo '  {'; \
-    echo '  echo "# BEGIN ENABLE GZIP COMPRESSION"'; \
-    echo '  echo "<IfModule mod_deflate.c>"'; \
-    echo '  echo "<IfModule mod_filter.c>"'; \
-    echo '  echo "  SetOutputFilter DEFLATE"'; \
-    echo '  echo "  SetEnvIfNoCase Request_URI \.(?:gif|jpe?g|png)$ no-gzip dont-vary"'; \
-    echo '  echo "</IfModule>"'; \
-    echo '  echo "</IfModule>"'; \
-    echo '  echo "# END ENABLE GZIP COMPRESSION"'; \
-    echo '  } >> /svn/.htaccess'; \
-    echo 'fi'; \ 
     echo 'if [ ! -e /svn/${SVN_REPOSITORY} ]; then'; \
     echo '  svnadmin create /svn/${SVN_REPOSITORY}'; \
     echo 'fi'; \
@@ -79,7 +64,6 @@ ENTRYPOINT ["entrypoint.sh"]
 ENV TIMEZONE Asia/Tokyo
 
 ENV REQUIRE_SSL true
-ENV ENABLE_GZIP_COMPRESSION true
 
 ENV SVN_REPOSITORY dev
 ENV SVN_USER user
