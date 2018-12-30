@@ -2,10 +2,12 @@ FROM centos
 MAINTAINER "Hiroki Takeyama"
 
 # svn
-RUN yum -y install svn; yum clean all;
+RUN yum -y install svn; \
+    yum clean all;
 
 # httpd
-RUN yum -y install httpd mod_ssl mod_dav_svn; yum clean all; \
+RUN yum -y install httpd mod_ssl mod_dav_svn; \
+    yum clean all; \
     { \
     echo '<Location />'; \
     echo '  Dav svn'; \
