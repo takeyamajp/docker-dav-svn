@@ -1,3 +1,6 @@
+[![Docker Stars](https://img.shields.io/docker/stars/takeyamajp/dav-svn.svg?style=flat-square)](https://hub.docker.com/r/takeyamajp/dav-svn/)
+[![Docker Pulls](https://img.shields.io/docker/pulls/takeyamajp/dav-svn.svg?style=flat-square)](https://hub.docker.com/r/takeyamajp/dav-svn/)
+
 FROM centos  
 MAINTAINER "Hiroki Takeyama"
 
