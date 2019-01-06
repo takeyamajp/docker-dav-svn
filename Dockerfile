@@ -7,6 +7,8 @@ RUN yum -y install svn; \
 
 # httpd
 RUN yum -y install httpd mod_ssl mod_dav_svn; \
+    sed -i 's/^\s*CustomLog .*/CustomLog \/dev\/stdout "%t %h %u %{SVN-ACTION}e %U"/1' /etc/httpd/conf/httpd.conf; \
+    sed -i 's/^ErrorLog .*/ErrorLog \/dev\/stderr/1' /etc/httpd/conf/httpd.conf; \
     { \
     echo '<Location />'; \
     echo '  Dav svn'; \
