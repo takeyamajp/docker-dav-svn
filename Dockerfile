@@ -7,8 +7,7 @@ RUN yum -y install svn; \
 
 # httpd
 RUN yum -y install httpd mod_ssl mod_dav_svn; \
-    sed -i 's/^\s*CustomLog .*/CustomLog \/dev\/stdout "%t %h %u %{SVN-ACTION}e %U" env=SVN-ACTION/1' /etc/httpd/conf/httpd.conf; \
-    sed -i 's/^ErrorLog .*/ErrorLog \/dev\/stderr/1' /etc/httpd/conf/httpd.conf; \
+    yum clean all; \
     { \
     echo '<Location />'; \
     echo '  Dav svn'; \
@@ -20,11 +19,14 @@ RUN yum -y install httpd mod_ssl mod_dav_svn; \
     echo '  Require valid-user'; \
     echo '  AuthzSVNAccessFile /svn/access'; \
     echo '</Location>'; \
-    } >> /etc/httpd/conf/httpd.conf; \
-    yum clean all;
+    } >> /etc/httpd/conf.d/additional.conf;
 
 # prevent error AH00558 on stdout
 RUN echo 'ServerName ${HOSTNAME}' >> /etc/httpd/conf.d/additional.conf;
+
+# logging
+RUN echo 'CustomLog /dev/stdout "%t %h %u %U %{SVN-ACTION}e" env=SVN-ACTION' >> /etc/httpd/conf.d/additional.conf; \
+    echo 'ErrorLog /dev/stderr' >> /etc/httpd/conf.d/additional.conf;
 
 # entrypoint
 RUN mkdir /svn; \
