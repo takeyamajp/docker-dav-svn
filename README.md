@@ -10,6 +10,8 @@
     
     ENV REQUIRE_SSL true
     
+    ENV HTTPD_LOG_LEVEL warn
+    
     ENV SVN_REPOSITORY dev  
     ENV SVN_USER user  
     ENV SVN_PASSWORD user
