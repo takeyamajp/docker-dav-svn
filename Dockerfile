@@ -7,8 +7,12 @@ RUN yum -y install subversion; \
 
 # httpd
 RUN yum -y install httpd mod_ssl mod_dav_svn; \
-    sed -i 's/^\s*CustomLog .*/CustomLog \/dev\/stdout "%t %{X-Forwarded-For}i %a %u %{SVN-ACTION}e %U" env=SVN-ACTION/1' /etc/httpd/conf/httpd.conf; \
+    sed -i 's/^\s*CustomLog .*/CustomLog \/dev\/stdout "%{X-Forwarded-For}i %h %l %u %t \\"%r\\" %>s %b \\"%{Referer}i\\" \\"%{User-Agent}i\\" %I %O"/1' /etc/httpd/conf/httpd.conf; \
     sed -i 's/^ErrorLog .*/ErrorLog \/dev\/stderr/1' /etc/httpd/conf/httpd.conf; \
+    sed -i 's/^\s*CustomLog .*/CustomLog \/dev\/stdout "%{X-Forwarded-For}i %h %l %u %t \\"%r\\" %>s %b \\"%{Referer}i\\" \\"%{User-Agent}i\\" %I %O"/1' /etc/httpd/conf.d/ssl.conf; \
+    sed -i 's/^ErrorLog .*/ErrorLog \/dev\/stderr/1' /etc/httpd/conf.d/ssl.conf; \
+    sed -i 's/^\s*"%t %h %{SSL_PROTOCOL}x %{SSL_CIPHER}x \\"%r\\" %b"//1' /etc/httpd/conf.d/ssl.conf; \
+    echo 'CustomLog \/dev\/stdout "%t %{X-Forwarded-For}i %a %u %{SVN-ACTION}e %U" env=SVN-ACTION' >> /etc/httpd/conf/httpd.conf; \
     { \
     echo '<Location />'; \
     echo '  Dav svn'; \
@@ -32,6 +36,8 @@ RUN mkdir /svn; \
     echo '#!/bin/bash -eu'; \
     echo 'rm -f /etc/localtime'; \
     echo 'ln -fs /usr/share/zoneinfo/${TIMEZONE} /etc/localtime'; \
+    echo 'sed -i "s/^LogLevel .*/LogLevel ${HTTPD_LOG_LEVEL}/1" /etc/httpd/conf/httpd.conf'; \
+    echo 'sed -i "s/^LogLevel .*/LogLevel ${HTTPD_LOG_LEVEL}/1" /etc/httpd/conf.d/ssl.conf'; \
     echo 'if [ -e /etc/httpd/conf.d/requireSsl.conf ]; then'; \
     echo '  rm -f /etc/httpd/conf.d/requireSsl.conf'; \
     echo 'fi'; \
@@ -64,6 +70,8 @@ ENTRYPOINT ["entrypoint.sh"]
 ENV TIMEZONE Asia/Tokyo
 
 ENV REQUIRE_SSL true
+
+ENV HTTPD_LOG_LEVEL warn
 
 ENV SVN_REPOSITORY dev
 ENV SVN_USER user
