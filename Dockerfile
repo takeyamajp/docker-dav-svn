@@ -14,6 +14,11 @@ RUN yum -y install httpd mod_ssl mod_dav_svn; \
     sed -i 's/^\s*"%t %h %{SSL_PROTOCOL}x %{SSL_CIPHER}x \\"%r\\" %b"//1' /etc/httpd/conf.d/ssl.conf; \
     echo 'CustomLog \/dev\/stdout "%t %{X-Forwarded-For}i %a %u %{SVN-ACTION}e %U" env=SVN-ACTION' >> /etc/httpd/conf/httpd.conf; \
     { \
+    echo '<VirtualHost _default_:443>'; \
+    echo '  CustomLog \/dev\/stdout "%t %{X-Forwarded-For}i %a %u %{SVN-ACTION}e %U" env=SVN-ACTION'; \
+    echo '</VirtualHost>'; \
+    } >> /etc/httpd/conf.d/ssl.conf; \
+    { \
     echo '<Location />'; \
     echo '  Dav svn'; \
     echo '  SVNParentPath /svn'; \
