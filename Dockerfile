@@ -1,8 +1,8 @@
 FROM centos
 MAINTAINER "Hiroki Takeyama"
 
-# svn
-RUN yum -y install svn; \
+# subversion
+RUN yum -y install subversion; \
     yum clean all;
 
 # httpd
