@@ -12,10 +12,10 @@ RUN yum -y install httpd mod_ssl mod_dav_svn; \
     sed -i 's/^\s*CustomLog .*/CustomLog \/dev\/stdout "%{X-Forwarded-For}i %h %l %u %t \\"%r\\" %>s %b \\"%{Referer}i\\" \\"%{User-Agent}i\\" %I %O"/1' /etc/httpd/conf.d/ssl.conf; \
     sed -i 's/^ErrorLog .*/ErrorLog \/dev\/stderr/1' /etc/httpd/conf.d/ssl.conf; \
     sed -i 's/^\s*"%t %h %{SSL_PROTOCOL}x %{SSL_CIPHER}x \\"%r\\" %b"//1' /etc/httpd/conf.d/ssl.conf; \
-    echo 'CustomLog /dev/stdout "%t %{X-Forwarded-For}i %a %u %{SVN-ACTION}e %U" env=SVN-ACTION' >> /etc/httpd/conf/httpd.conf; \
+    echo 'CustomLog /dev/stdout "%{X-Forwarded-For}i %h %l %u %t %{SVN-ACTION}e %U" env=SVN-ACTION' >> /etc/httpd/conf/httpd.conf; \
     { \
     echo '<VirtualHost _default_:443>'; \
-    echo '  CustomLog /dev/stdout "%t %{X-Forwarded-For}i %a %u %{SVN-ACTION}e %U" env=SVN-ACTION'; \
+    echo '  CustomLog /dev/stdout "%{X-Forwarded-For}i %h %l %u %t %{SVN-ACTION}e %U" env=SVN-ACTION'; \
     echo '</VirtualHost>'; \
     } >> /etc/httpd/conf.d/ssl.conf; \
     { \
