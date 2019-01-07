@@ -16,7 +16,7 @@ RUN yum -y install httpd mod_ssl mod_dav_svn; \
     echo 'CustomLog /dev/stdout "%{X-Forwarded-For}i %h %l %u %t %{SVN-ACTION}e %U" env=SVN-ACTION' >> /etc/httpd/conf/httpd.conf; \
     { \
     echo '<VirtualHost _default_:443>'; \
-    echo '  CustomLog /dev/stdout "%{X-Forwarded-For}i %h %l %u %t %{SVN-ACTION}e %U" env=SVN-ACTION'; \
+    echo 'CustomLog /dev/stdout "%{X-Forwarded-For}i %h %l %u %t %{SVN-ACTION}e %U" env=SVN-ACTION'; \
     echo '</VirtualHost>'; \
     } >> /etc/httpd/conf.d/ssl.conf; \
     sed -i 's/^\(LoadModule auth_digest_module .*\)/#\1/1' /etc/httpd/conf.modules.d/00-base.conf; \
