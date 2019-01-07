@@ -2,7 +2,8 @@ FROM centos
 MAINTAINER "Hiroki Takeyama"
 
 # subversion
-RUN yum -y install subversion; \
+RUN mkdir /svn; \
+    yum -y install subversion; \
     yum clean all;
 
 # httpd
@@ -39,8 +40,7 @@ RUN yum -y install httpd mod_ssl mod_dav_svn; \
 RUN echo 'ServerName ${HOSTNAME}' >> /etc/httpd/conf.d/additional.conf;
 
 # entrypoint
-RUN mkdir /svn; \
-    { \
+RUN { \
     echo '#!/bin/bash -eu'; \
     echo 'rm -f /etc/localtime'; \
     echo 'ln -fs /usr/share/zoneinfo/${TIMEZONE} /etc/localtime'; \
