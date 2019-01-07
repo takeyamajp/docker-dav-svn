@@ -18,6 +18,8 @@ RUN yum -y install httpd mod_ssl mod_dav_svn; \
     echo '  CustomLog /dev/stdout "%{X-Forwarded-For}i %h %l %u %t %{SVN-ACTION}e %U" env=SVN-ACTION'; \
     echo '</VirtualHost>'; \
     } >> /etc/httpd/conf.d/ssl.conf; \
+    rm -f /etc/httpd/conf.modules.d/00-proxy.conf; \
+    rm -f /usr/sbin/suexec; \
     { \
     echo '<Location />'; \
     echo '  Dav svn'; \
