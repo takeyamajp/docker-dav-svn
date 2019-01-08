@@ -16,7 +16,7 @@ RUN yum -y install httpd mod_ssl mod_dav_svn; \
     echo 'CustomLog /dev/stdout "%{X-Forwarded-For}i %h %l %u %t %{SVN-ACTION}e %U" env=SVN-ACTION' >> /etc/httpd/conf/httpd.conf; \
     { \
     echo '<VirtualHost _default_:443>'; \
-    echo 'CustomLog /dev/stdout "%{X-Forwarded-For}i %h %l %u %t %{SVN-ACTION}e %U" env=SVN-ACTION'; \
+    echo '  CustomLog /dev/stdout "%{X-Forwarded-For}i %h %l %u %t %{SVN-ACTION}e %U" env=SVN-ACTION'; \
     echo '</VirtualHost>'; \
     } >> /etc/httpd/conf.d/ssl.conf; \
     sed -i 's/^\(LoadModule auth_digest_module .*\)/#\1/1' /etc/httpd/conf.modules.d/00-base.conf; \
@@ -44,6 +44,16 @@ RUN { \
     echo 'ln -fs /usr/share/zoneinfo/${TIMEZONE} /etc/localtime'; \
     echo 'sed -i "s/^LogLevel .*/LogLevel ${HTTPD_LOG_LEVEL}/1" /etc/httpd/conf/httpd.conf'; \
     echo 'sed -i "s/^LogLevel .*/LogLevel ${HTTPD_LOG_LEVEL}/1" /etc/httpd/conf.d/ssl.conf'; \
+    echo 'sed -i "s/^\(\s*CustomLog .*\)/#\1/g" /etc/httpd/conf/httpd.conf'; \
+    echo 'sed -i "s/^\(ErrorLog .*\)/#\1/1" /etc/httpd/conf/httpd.conf'; \
+    echo 'sed -i "s/^\(\s*CustomLog .*\)/#\1/g" /etc/httpd/conf.d/ssl.conf'; \
+    echo 'sed -i "s/^\(ErrorLog .*\)/#\1/1" /etc/httpd/conf.d/ssl.conf'; \
+    echo 'if [ ${HTTPD_LOGGING,,} = "true" ]; then'; \
+    echo '  sed -i "s/^#\(\s*CustomLog .*\)/\1/g" /etc/httpd/conf/httpd.conf'; \
+    echo '  sed -i "s/^#\(ErrorLog .*\)/\1/1" /etc/httpd/conf/httpd.conf'; \
+    echo '  sed -i "s/^#\(\s*CustomLog .*\)/\1/g" /etc/httpd/conf.d/ssl.conf'; \
+    echo '  sed -i "s/^#\(ErrorLog .*\)/\1/1" /etc/httpd/conf.d/ssl.conf'; \
+    echo 'fi'; \
     echo 'if [ -e /etc/httpd/conf.d/requireSsl.conf ]; then'; \
     echo '  rm -f /etc/httpd/conf.d/requireSsl.conf'; \
     echo 'fi'; \
@@ -77,6 +87,7 @@ ENV TIMEZONE Asia/Tokyo
 
 ENV REQUIRE_SSL true
 
+ENV HTTPD_LOGGING true
 ENV HTTPD_LOG_LEVEL warn
 
 ENV SVN_REPOSITORY dev
