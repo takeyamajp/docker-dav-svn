@@ -20,6 +20,7 @@ RUN yum -y install httpd mod_ssl mod_dav_svn; \
     echo '</VirtualHost>'; \
     } >> /etc/httpd/conf.d/ssl.conf; \
     sed -i 's/^\(LoadModule auth_digest_module .*\)/#\1/1' /etc/httpd/conf.modules.d/00-base.conf; \
+    echo 'ServerName ${HOSTNAME}' >> /etc/httpd/conf.d/additional.conf; \
     rm -f /etc/httpd/conf.modules.d/00-proxy.conf; \
     rm -f /usr/sbin/suexec; \
     { \
@@ -35,9 +36,6 @@ RUN yum -y install httpd mod_ssl mod_dav_svn; \
     echo '</Location>'; \
     } >> /etc/httpd/conf/httpd.conf; \
     yum clean all;
-
-# prevent error AH00558 on stdout
-RUN echo 'ServerName ${HOSTNAME}' >> /etc/httpd/conf.d/additional.conf;
 
 # entrypoint
 RUN { \
