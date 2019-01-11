@@ -8,10 +8,10 @@ RUN mkdir /svn; \
 
 # httpd
 RUN yum -y install httpd mod_ssl mod_dav_svn; \
-    sed -i 's/^\s*CustomLog .*/CustomLog \/dev\/stdout "%{X-Forwarded-For}i %h %l %u %t \\"%r\\" %>s %b \\"%{Referer}i\\" \\"%{User-Agent}i\\" %I %O"/1' /etc/httpd/conf/httpd.conf; \
-    sed -i 's/^ErrorLog .*/ErrorLog \/dev\/stderr/1' /etc/httpd/conf/httpd.conf; \
-    sed -i 's/^\s*CustomLog .*/CustomLog \/dev\/stdout "%{X-Forwarded-For}i %h %l %u %t \\"%r\\" %>s %b \\"%{Referer}i\\" \\"%{User-Agent}i\\" %I %O"/1' /etc/httpd/conf.d/ssl.conf; \
-    sed -i 's/^ErrorLog .*/ErrorLog \/dev\/stderr/1' /etc/httpd/conf.d/ssl.conf; \
+    sed -i 's/^\s*\(CustomLog\) .*/\1 \/dev\/stdout "%{X-Forwarded-For}i %h %l %u %t \\"%r\\" %>s %b \\"%{Referer}i\\" \\"%{User-Agent}i\\" %I %O"/1' /etc/httpd/conf/httpd.conf; \
+    sed -i 's/^\(ErrorLog\) .*/\1 \/dev\/stderr/1' /etc/httpd/conf/httpd.conf; \
+    sed -i 's/^\s*\(CustomLog\) .*/\1 \/dev\/stdout "%{X-Forwarded-For}i %h %l %u %t \\"%r\\" %>s %b \\"%{Referer}i\\" \\"%{User-Agent}i\\" %I %O"/1' /etc/httpd/conf.d/ssl.conf; \
+    sed -i 's/^\(ErrorLog\) .*/\1 \/dev\/stderr/1' /etc/httpd/conf.d/ssl.conf; \
     sed -i 's/^\s*"%t %h %{SSL_PROTOCOL}x %{SSL_CIPHER}x \\"%r\\" %b"//1' /etc/httpd/conf.d/ssl.conf; \
     echo 'CustomLog /dev/stdout "%{X-Forwarded-For}i %h %l %u %t %{SVN-ACTION}e %U" env=SVN-ACTION' >> /etc/httpd/conf/httpd.conf; \
     { \
@@ -42,8 +42,8 @@ RUN { \
     echo '#!/bin/bash -eu'; \
     echo 'rm -f /etc/localtime'; \
     echo 'ln -fs /usr/share/zoneinfo/${TIMEZONE} /etc/localtime'; \
-    echo 'sed -i "s/^LogLevel .*/LogLevel ${HTTPD_LOG_LEVEL}/1" /etc/httpd/conf/httpd.conf'; \
-    echo 'sed -i "s/^LogLevel .*/LogLevel ${HTTPD_LOG_LEVEL}/1" /etc/httpd/conf.d/ssl.conf'; \
+    echo 'sed -i "s/^\(LogLevel\) .*/\1 ${HTTPD_LOG_LEVEL}/1" /etc/httpd/conf/httpd.conf'; \
+    echo 'sed -i "s/^\(LogLevel\) .*/\1 ${HTTPD_LOG_LEVEL}/1" /etc/httpd/conf.d/ssl.conf'; \
     echo 'sed -i "s/^\(\s*CustomLog .*\)/#\1/g" /etc/httpd/conf/httpd.conf'; \
     echo 'sed -i "s/^\(ErrorLog .*\)/#\1/1" /etc/httpd/conf/httpd.conf'; \
     echo 'sed -i "s/^\(\s*CustomLog .*\)/#\1/g" /etc/httpd/conf.d/ssl.conf'; \
