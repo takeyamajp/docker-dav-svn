@@ -11,7 +11,7 @@
     
     ENV REQUIRE_SSL true
     
-    ENV HTTPD_LOGGING true  
+    ENV HTTPD_LOG true  
     ENV HTTPD_LOG_LEVEL warn
     
     ENV SVN_REPOSITORY dev  
