@@ -8,6 +8,7 @@ RUN mkdir /svn; \
 
 # httpd
 RUN yum -y install httpd mod_ssl mod_dav_svn; \
+    sed -i 's/^#\(ServerName\) .*/\1 ${HOSTNAME}/1' >> /etc/httpd/conf.d/additional.conf; \
     sed -i 's/^\s*\(CustomLog\) .*/\1 \/dev\/stdout "%{X-Forwarded-For}i %h %l %u %t \\"%r\\" %>s %b \\"%{Referer}i\\" \\"%{User-Agent}i\\" %I %O"/1' /etc/httpd/conf/httpd.conf; \
     sed -i 's/^\(ErrorLog\) .*/\1 \/dev\/stderr/1' /etc/httpd/conf/httpd.conf; \
     sed -i 's/^\s*\(CustomLog\) .*/\1 \/dev\/stdout "%{X-Forwarded-For}i %h %l %u %t \\"%r\\" %>s %b \\"%{Referer}i\\" \\"%{User-Agent}i\\" %I %O"/1' /etc/httpd/conf.d/ssl.conf; \
@@ -15,7 +16,6 @@ RUN yum -y install httpd mod_ssl mod_dav_svn; \
     echo 'CustomLog /dev/stdout "%{X-Forwarded-For}i %h %l %u %t %{SVN-ACTION}e %U" env=SVN-ACTION' >> /etc/httpd/conf/httpd.conf; \
     sed -i 's/^\s*"%t %h %{SSL_PROTOCOL}x %{SSL_CIPHER}x \\"%r\\" %b"/CustomLog \/dev\/stdout "%{X-Forwarded-For}i %h %l %u %t %{SVN-ACTION}e %U" env=SVN-ACTION/1' /etc/httpd/conf.d/ssl.conf; \
     sed -i 's/^\(LoadModule auth_digest_module .*\)/#\1/1' /etc/httpd/conf.modules.d/00-base.conf; \
-    echo 'ServerName ${HOSTNAME}' >> /etc/httpd/conf.d/additional.conf; \
     rm -f /etc/httpd/conf.modules.d/00-proxy.conf; \
     rm -f /usr/sbin/suexec; \
     { \
