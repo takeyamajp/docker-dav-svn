@@ -39,14 +39,14 @@ RUN { \
     echo 'ln -fs /usr/share/zoneinfo/${TIMEZONE} /etc/localtime'; \
     echo 'sed -i "s/^\(LogLevel\) .*/\1 ${HTTPD_LOG_LEVEL}/1" /etc/httpd/conf/httpd.conf'; \
     echo 'sed -i "s/^\(LogLevel\) .*/\1 ${HTTPD_LOG_LEVEL}/1" /etc/httpd/conf.d/ssl.conf'; \
-    echo 'sed -i "s/^\(\s*CustomLog .*\)/#\1/g" /etc/httpd/conf/httpd.conf'; \
+    echo 'sed -i "s/^\(CustomLog .*\)/#\1/g" /etc/httpd/conf/httpd.conf'; \
     echo 'sed -i "s/^\(ErrorLog .*\)/#\1/1" /etc/httpd/conf/httpd.conf'; \
-    echo 'sed -i "s/^\(\s*CustomLog .*\)/#\1/g" /etc/httpd/conf.d/ssl.conf'; \
+    echo 'sed -i "s/^\(CustomLog .*\)/#\1/g" /etc/httpd/conf.d/ssl.conf'; \
     echo 'sed -i "s/^\(ErrorLog .*\)/#\1/1" /etc/httpd/conf.d/ssl.conf'; \
     echo 'if [ ${HTTPD_LOGGING,,} = "true" ]; then'; \
-    echo '  sed -i "s/^#\(\s*CustomLog .*\)/\1/g" /etc/httpd/conf/httpd.conf'; \
+    echo '  sed -i "s/^#\(CustomLog .*\)/\1/g" /etc/httpd/conf/httpd.conf'; \
     echo '  sed -i "s/^#\(ErrorLog .*\)/\1/1" /etc/httpd/conf/httpd.conf'; \
-    echo '  sed -i "s/^#\(\s*CustomLog .*\)/\1/g" /etc/httpd/conf.d/ssl.conf'; \
+    echo '  sed -i "s/^#\(CustomLog .*\)/\1/g" /etc/httpd/conf.d/ssl.conf'; \
     echo '  sed -i "s/^#\(ErrorLog .*\)/\1/1" /etc/httpd/conf.d/ssl.conf'; \
     echo 'fi'; \
     echo 'if [ -e /etc/httpd/conf.d/requireSsl.conf ]; then'; \
