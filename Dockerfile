@@ -43,7 +43,7 @@ RUN { \
     echo 'sed -i "s/^\(ErrorLog .*\)/#\1/1" /etc/httpd/conf/httpd.conf'; \
     echo 'sed -i "s/^\(CustomLog .*\)/#\1/g" /etc/httpd/conf.d/ssl.conf'; \
     echo 'sed -i "s/^\(ErrorLog .*\)/#\1/1" /etc/httpd/conf.d/ssl.conf'; \
-    echo 'if [ ${HTTPD_LOGGING,,} = "true" ]; then'; \
+    echo 'if [ ${HTTPD_LOG,,} = "true" ]; then'; \
     echo '  sed -i "s/^#\(CustomLog .*\)/\1/g" /etc/httpd/conf/httpd.conf'; \
     echo '  sed -i "s/^#\(ErrorLog .*\)/\1/1" /etc/httpd/conf/httpd.conf'; \
     echo '  sed -i "s/^#\(CustomLog .*\)/\1/g" /etc/httpd/conf.d/ssl.conf'; \
@@ -82,7 +82,7 @@ ENV TIMEZONE Asia/Tokyo
 
 ENV REQUIRE_SSL true
 
-ENV HTTPD_LOGGING true
+ENV HTTPD_LOG true
 ENV HTTPD_LOG_LEVEL warn
 
 ENV SVN_REPOSITORY dev
