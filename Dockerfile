@@ -8,6 +8,7 @@ RUN mkdir /svn; \
 
 # httpd
 RUN yum -y install httpd mod_ssl mod_dav_svn; \
+    openssl genrsa -out "/etc/pki/tls/private/localhost.key" 2048; \
     sed -i 's/^#\(ServerName\) .*/\1 ${HOSTNAME}/' /etc/httpd/conf/httpd.conf; \
     sed -i 's/^\s*\(CustomLog\) .*/\1 \/dev\/stdout "%{X-Forwarded-For}i %h %l %u %t \\"%r\\" %>s %b \\"%{Referer}i\\" \\"%{User-Agent}i\\" %I %O"/' /etc/httpd/conf/httpd.conf; \
     sed -i 's/^\(ErrorLog\) .*/\1 \/dev\/stderr/' /etc/httpd/conf/httpd.conf; \
@@ -37,6 +38,8 @@ RUN { \
     echo '#!/bin/bash -eu'; \
     echo 'rm -f /etc/localtime'; \
     echo 'ln -fs /usr/share/zoneinfo/${TIMEZONE} /etc/localtime'; \
+    echo 'rm -f /etc/pki/tls/certs/localhost.crt'; \
+    echo 'openssl req -new -key "/etc/pki/tls/private/localhost.key" -x509 -subj "/CN=${HOSTNAME}" -days 36500 -out "/etc/pki/tls/certs/localhost.crt"'; \
     echo 'sed -i "s/^\(LogLevel\) .*/\1 ${HTTPD_LOG_LEVEL}/" /etc/httpd/conf/httpd.conf'; \
     echo 'sed -i "s/^\(LogLevel\) .*/\1 ${HTTPD_LOG_LEVEL}/" /etc/httpd/conf.d/ssl.conf'; \
     echo 'sed -i "s/^\(CustomLog .*\)/#\1/" /etc/httpd/conf/httpd.conf'; \
