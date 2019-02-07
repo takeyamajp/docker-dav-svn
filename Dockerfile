@@ -38,7 +38,6 @@ RUN { \
     echo '#!/bin/bash -eu'; \
     echo 'rm -f /etc/localtime'; \
     echo 'ln -fs /usr/share/zoneinfo/${TIMEZONE} /etc/localtime'; \
-    echo 'rm -f /etc/pki/tls/certs/localhost.crt'; \
     echo 'openssl req -new -key "/etc/pki/tls/private/localhost.key" -x509 -subj "/CN=${HOSTNAME}" -days 36500 -out "/etc/pki/tls/certs/localhost.crt"'; \
     echo 'sed -i "s/^\(LogLevel\) .*/\1 ${HTTPD_LOG_LEVEL}/" /etc/httpd/conf/httpd.conf'; \
     echo 'sed -i "s/^\(LogLevel\) .*/\1 ${HTTPD_LOG_LEVEL}/" /etc/httpd/conf.d/ssl.conf'; \
