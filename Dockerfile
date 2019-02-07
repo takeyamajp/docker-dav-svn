@@ -41,7 +41,7 @@ RUN { \
     echo 'rm -f /etc/localtime'; \
     echo 'ln -fs /usr/share/zoneinfo/${TIMEZONE} /etc/localtime'; \
     echo 'openssl req -new -key "/etc/pki/tls/private/localhost.key" -subj "/CN=${HOSTNAME}" -out "/etc/pki/tls/certs/localhost.csr"'; \
-    echo 'openssl x509 -req -days 36500 -in "/etc/pki/tls/certs/localhost.csr" -signkey "/etc/pki/tls/private/localhost.key" -out "/etc/pki/tls/certs/localhost.crt &>/dev/null"'; \
+    echo 'openssl x509 -req -days 36500 -in "/etc/pki/tls/certs/localhost.csr" -signkey "/etc/pki/tls/private/localhost.key" -out "/etc/pki/tls/certs/localhost.crt" &>/dev/null'; \
     echo 'sed -i "s/^\(LogLevel\) .*/\1 ${HTTPD_LOG_LEVEL}/" /etc/httpd/conf/httpd.conf'; \
     echo 'sed -i "s/^\(LogLevel\) .*/\1 ${HTTPD_LOG_LEVEL}/" /etc/httpd/conf.d/ssl.conf'; \
     echo 'sed -i "s/^\(CustomLog .*\)/#\1/" /etc/httpd/conf/httpd.conf'; \
