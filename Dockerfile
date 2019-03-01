@@ -42,6 +42,10 @@ RUN { \
     echo 'ln -fs /usr/share/zoneinfo/${TIMEZONE} /etc/localtime'; \
     echo 'openssl req -new -key "/etc/pki/tls/private/localhost.key" -subj "/CN=${HOSTNAME}" -out "/etc/pki/tls/certs/localhost.csr"'; \
     echo 'openssl x509 -req -days 36500 -in "/etc/pki/tls/certs/localhost.csr" -signkey "/etc/pki/tls/private/localhost.key" -out "/etc/pki/tls/certs/localhost.crt" &>/dev/null'; \
+    echo 'if [ -e /svn/cert.pem ] && [ -e /svn/key.pem ]; then'; \
+    echo '  cp -f /svn/cert.pem /etc/pki/tls/certs/localhost.crt'; \
+    echo '  cp -f /svn/key.pem /etc/pki/tls/private/localhost.key'; \
+    echo 'fi'; \
     echo 'sed -i "s/^\(LogLevel\) .*/\1 ${HTTPD_LOG_LEVEL}/" /etc/httpd/conf/httpd.conf'; \
     echo 'sed -i "s/^\(LogLevel\) .*/\1 ${HTTPD_LOG_LEVEL}/" /etc/httpd/conf.d/ssl.conf'; \
     echo 'sed -i "s/^\(CustomLog .*\)/#\1/" /etc/httpd/conf/httpd.conf'; \
@@ -67,16 +71,23 @@ RUN { \
     echo 'if [ ! -e /svn/${SVN_REPOSITORY} ]; then'; \
     echo '  svnadmin create /svn/${SVN_REPOSITORY}'; \
     echo 'fi'; \
-    echo 'if [ ! -e /svn/passwd ]; then'; \
-    echo '  htpasswd -bmc /svn/passwd ${SVN_USER} ${SVN_PASSWORD} &>/dev/null'; \
+    echo 'if [ -e /svn/passwd ]; then'; \
+    echo '  rm -f /svn/passwd'; \
     echo 'fi'; \
-    echo 'if [ ! -e /svn/access ]; then'; \
+    echo 'if [ -e /svn/access ]; then'; \
     echo '  {'; \
     echo '  echo "[/]";'; \
     echo '  echo "* = r";'; \
-    echo '  echo "${SVN_USER} = rw";'; \
     echo '  } > /svn/access'; \
     echo 'fi'; \
+    echo 'ARRAY_USER=(`echo ${USER} | tr "," " "`)'; \
+    echo 'ARRAY_PASSWORD=(`echo ${PASSWORD} | tr "," " "`)'; \
+    echo 'INDEX=0'; \
+    echo 'for e in ${ARRAY_USER[@]}; do'; \
+    echo '  htpasswd -bmn ${ARRAY_USER[${INDEX}]} ${ARRAY_PASSWORD[${INDEX}]} | head -c -1 >> /svn/passwd'; \
+    echo '  echo "${ARRAY_USER[${INDEX}]} = rw" >> /svn/access'; \
+    echo '  ((INDEX+=1))'; \
+    echo 'done'; \
     echo 'chown -R apache:apache /svn'; \
     echo 'exec "$@"'; \
     } > /usr/local/bin/entrypoint.sh; \
@@ -91,8 +102,8 @@ ENV HTTPD_LOG true
 ENV HTTPD_LOG_LEVEL warn
 
 ENV SVN_REPOSITORY dev
-ENV SVN_USER user
-ENV SVN_PASSWORD user
+ENV SVN_USER user1,user2
+ENV SVN_PASSWORD password1,password2
 
 VOLUME /svn
 
