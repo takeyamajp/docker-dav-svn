@@ -15,8 +15,8 @@
     ENV HTTPD_LOG_LEVEL warn
     
     ENV SVN_REPOSITORY dev  
-    ENV SVN_USER user  
-    ENV SVN_PASSWORD user
+    ENV SVN_USER user1,user2  
+    ENV SVN_PASSWORD password1,password2
     
     VOLUME /svn
     
