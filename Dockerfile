@@ -75,11 +75,12 @@ RUN { \
     echo '  rm -f /svn/passwd'; \
     echo 'fi'; \
     echo 'if [ -e /svn/access ]; then'; \
-    echo '  {'; \
-    echo '  echo "[/]";'; \
-    echo '  echo "* = r";'; \
-    echo '  } > /svn/access'; \
+    echo '  rm -f /svn/access'; \
     echo 'fi'; \
+    echo '{'; \
+    echo 'echo "[/]";'; \
+    echo 'echo "* = r";'; \
+    echo '} > /svn/access'; \
     echo 'ARRAY_USER=(`echo ${SVN_USER} | tr "," " "`)'; \
     echo 'ARRAY_PASSWORD=(`echo ${SVN_PASSWORD} | tr "," " "`)'; \
     echo 'INDEX=0'; \
