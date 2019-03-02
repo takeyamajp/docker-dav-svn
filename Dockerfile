@@ -1,6 +1,14 @@
 FROM centos:centos7
 MAINTAINER "Hiroki Takeyama"
 
+# certificate
+RUN mkdir /cert; \
+    yum -y install openssl; \
+    openssl genrsa -aes128 -passout pass:dummy -out "/cert/key.pass.pem" 2048; \
+    openssl rsa -passin pass:dummy -in "/cert/key.pass.pem" -out "/cert/key.pem"; \
+    rm -f /cert/key.pass.pem; \
+    yum clean all;
+
 # subversion
 RUN mkdir /svn; \
     yum -y install subversion; \
@@ -8,9 +16,6 @@ RUN mkdir /svn; \
 
 # httpd
 RUN yum -y install httpd mod_ssl mod_dav_svn; \
-    openssl genrsa -aes128 -passout pass:dummy -out "/etc/pki/tls/private/localhost.pass.key" 2048; \
-    openssl rsa -passin pass:dummy -in "/etc/pki/tls/private/localhost.pass.key" -out "/etc/pki/tls/private/localhost.key"; \
-    rm -f "/etc/pki/tls/private/localhost.pass.key"; \
     sed -i 's/^#\(ServerName\) .*/\1 ${HOSTNAME}/' /etc/httpd/conf/httpd.conf; \
     sed -i 's/^\s*\(CustomLog\) .*/\1 \/dev\/stdout "%{X-Forwarded-For}i %h %l %u %t \\"%r\\" %>s %b \\"%{Referer}i\\" \\"%{User-Agent}i\\" %I %O"/' /etc/httpd/conf/httpd.conf; \
     sed -i 's/^\(ErrorLog\) .*/\1 \/dev\/stderr/' /etc/httpd/conf/httpd.conf; \
@@ -18,6 +23,8 @@ RUN yum -y install httpd mod_ssl mod_dav_svn; \
     sed -i 's/^\(ErrorLog\) .*/\1 \/dev\/stderr/' /etc/httpd/conf.d/ssl.conf; \
     echo 'CustomLog /dev/stdout "%{X-Forwarded-For}i %h %l %u %t %{SVN-ACTION}e %U" env=SVN-ACTION' >> /etc/httpd/conf/httpd.conf; \
     sed -i 's/^\s*"%t %h %{SSL_PROTOCOL}x %{SSL_CIPHER}x \\"%r\\" %b"/CustomLog \/dev\/stdout "%{X-Forwarded-For}i %h %l %u %t %{SVN-ACTION}e %U" env=SVN-ACTION/' /etc/httpd/conf.d/ssl.conf; \
+    echo 'sed -i "s/^\(SSLCertificateFile\) .*/\1 \/cert\/cert.pem/" /etc/httpd/conf.d/ssl.conf'; \
+    echo 'sed -i "s/^\(SSLCertificateKeyFile\) .*/\1 \/cert\/key.pem/" /etc/httpd/conf.d/ssl.conf'; \
     sed -i 's/^\(LoadModule auth_digest_module .*\)/#\1/' /etc/httpd/conf.modules.d/00-base.conf; \
     rm -f /etc/httpd/conf.modules.d/00-proxy.conf; \
     rm -f /usr/sbin/suexec; \
@@ -40,10 +47,10 @@ RUN { \
     echo '#!/bin/bash -eu'; \
     echo 'rm -f /etc/localtime'; \
     echo 'ln -fs /usr/share/zoneinfo/${TIMEZONE} /etc/localtime'; \
-    echo 'openssl req -new -key "/etc/pki/tls/private/localhost.key" -subj "/CN=${HOSTNAME}" -out "/etc/pki/tls/certs/localhost.csr"'; \
-    echo 'openssl x509 -req -days 36500 -in "/etc/pki/tls/certs/localhost.csr" -signkey "/etc/pki/tls/private/localhost.key" -out "/etc/pki/tls/certs/localhost.crt" &>/dev/null'; \
-    echo 'sed -i "s/^\(SSLCertificateFile\) .*/\1 \/etc\/pki\/tls\/certs\/localhost.crt/" /etc/httpd/conf.d/ssl.conf'; \
-    echo 'sed -i "s/^\(SSLCertificateKeyFile\) .*/\1 \/etc\/pki\/tls\/private\/localhost.key/" /etc/httpd/conf.d/ssl.conf'; \
+    echo 'openssl req -new -key "/cert/key.pem" -subj "/CN=${HOSTNAME}" -out "/cert/csr.pem"'; \
+    echo 'openssl x509 -req -days 36500 -in "/cert/csr.pem" -signkey "/cert/key.pem" -out "/cert/cert.pem" &>/dev/null'; \
+    echo 'sed -i "s/^\(SSLCertificateFile\) .*/\1 \/cert\/cert.pem/" /etc/httpd/conf.d/ssl.conf'; \
+    echo 'sed -i "s/^\(SSLCertificateKeyFile\) .*/\1 \/cert\/key.pem/" /etc/httpd/conf.d/ssl.conf'; \
     echo 'if [ -e /svn/cert.pem ] && [ -e /svn/key.pem ]; then'; \
     echo '  sed -i "s/^\(SSLCertificateFile\) .*/\1 \/svn\/cert.pem/" /etc/httpd/conf.d/ssl.conf'; \
     echo '  sed -i "s/^\(SSLCertificateKeyFile\) .*/\1 \/svn\/key.pem/" /etc/httpd/conf.d/ssl.conf'; \
