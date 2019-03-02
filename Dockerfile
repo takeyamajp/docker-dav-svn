@@ -80,8 +80,8 @@ RUN { \
     echo '  echo "* = r";'; \
     echo '  } > /svn/access'; \
     echo 'fi'; \
-    echo 'ARRAY_USER=(`echo ${USER} | tr "," " "`)'; \
-    echo 'ARRAY_PASSWORD=(`echo ${PASSWORD} | tr "," " "`)'; \
+    echo 'ARRAY_USER=(`echo ${SVN_USER} | tr "," " "`)'; \
+    echo 'ARRAY_PASSWORD=(`echo ${SVN_PASSWORD} | tr "," " "`)'; \
     echo 'INDEX=0'; \
     echo 'for e in ${ARRAY_USER[@]}; do'; \
     echo '  htpasswd -bmn ${ARRAY_USER[${INDEX}]} ${ARRAY_PASSWORD[${INDEX}]} | head -c -1 >> /svn/passwd'; \
