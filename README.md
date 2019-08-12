@@ -11,6 +11,7 @@
     
     ENV REQUIRE_SSL true
     
+    ENV HTTPD_SERVER_ADMIN root@localhost  
     ENV HTTPD_LOG true  
     ENV HTTPD_LOG_LEVEL warn
     
