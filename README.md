@@ -8,8 +8,6 @@
 - [`centos7`](https://github.com/takeyamajp/docker-dav-svn/blob/master/centos7/Dockerfile)
 
 ### Image summary
-    MAINTAINER "Hiroki Takeyama"
-    
     ENV TIMEZONE Asia/Tokyo
     
     ENV REQUIRE_SSL true
