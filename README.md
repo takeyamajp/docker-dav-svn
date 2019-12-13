@@ -7,7 +7,7 @@
 - [`latest`,`centos8`](https://github.com/takeyamajp/docker-dav-svn/blob/master/centos8/Dockerfile)  
 - [`centos7`](https://github.com/takeyamajp/docker-dav-svn/blob/master/centos7/Dockerfile)
 
-### Summary
+### Image summary
     FROM centos:centos7  
     MAINTAINER "Hiroki Takeyama"
     
