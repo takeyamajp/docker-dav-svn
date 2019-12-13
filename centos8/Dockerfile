@@ -3,19 +3,19 @@ MAINTAINER "Hiroki Takeyama"
 
 # certificate
 RUN mkdir /cert; \
-    yum -y install openssl; \
+    dnf -y install openssl; \
     openssl genrsa -aes128 -passout pass:dummy -out "/cert/key.pass.pem" 2048; \
     openssl rsa -passin pass:dummy -in "/cert/key.pass.pem" -out "/cert/key.pem"; \
     rm -f /cert/key.pass.pem; \
-    yum clean all;
+    dnf clean all;
 
 # subversion
 RUN mkdir /svn; \
-    yum -y install subversion; \
-    yum clean all;
+    dnf -y install subversion; \
+    dnf clean all;
 
 # httpd
-RUN yum -y install httpd mod_ssl mod_dav_svn; \
+RUN dnf -y install httpd mod_ssl mod_dav_svn; \
     sed -i 's/^#\(ServerName\) .*/\1 ${HOSTNAME}/' /etc/httpd/conf/httpd.conf; \
     sed -i 's/^\s*\(CustomLog\) .*/\1 \/dev\/stdout "%{X-Forwarded-For}i %h %l %u %t \\"%r\\" %>s %b \\"%{Referer}i\\" \\"%{User-Agent}i\\" %I %O"/' /etc/httpd/conf/httpd.conf; \
     sed -i 's/^\(ErrorLog\) .*/\1 \/dev\/stderr/' /etc/httpd/conf/httpd.conf; \
@@ -37,7 +37,7 @@ RUN yum -y install httpd mod_ssl mod_dav_svn; \
     echo '  AuthzSVNAccessFile /svn/access'; \
     echo '</Location>'; \
     } >> /etc/httpd/conf/httpd.conf; \
-    yum clean all;
+    dnf clean all;
 
 # entrypoint
 RUN { \
