@@ -99,7 +99,6 @@ RUN { \
     echo 'exec "$@"'; \
     } > /usr/local/bin/entrypoint.sh; \
     chmod +x /usr/local/bin/entrypoint.sh;
-ENTRYPOINT ["entrypoint.sh"]
 
 ENV TIMEZONE Asia/Tokyo
 
@@ -117,4 +116,5 @@ VOLUME /svn
 EXPOSE 80
 EXPOSE 443
 
+ENTRYPOINT ["entrypoint.sh"]
 CMD ["httpd", "-DFOREGROUND"]
