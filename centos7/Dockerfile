@@ -76,6 +76,7 @@ RUN { \
     echo 'fi'; \
     echo 'if [ ! -e /svn/${SVN_REPOSITORY} ]; then'; \
     echo '  svnadmin create /svn/${SVN_REPOSITORY}'; \
+    echo '  svn mkdir file://localhost/svn/${SVN_REPOSITORY}/trunk file://localhost/svn/${SVN_REPOSITORY}/branches file://localhost/svn/${SVN_REPOSITORY}/tags'; \
     echo 'fi'; \
     echo 'if [ -e /svn/passwd ]; then'; \
     echo '  rm -f /svn/passwd'; \
