@@ -19,6 +19,7 @@
     ENV HTTPD_LOG_LEVEL warn
     
     ENV SVN_REPOSITORY dev  
+    ENV SVN_LIST_PARENT_PATH on  
     ENV SVN_USER user1,user2  
     ENV SVN_PASSWORD password1,password2
     
