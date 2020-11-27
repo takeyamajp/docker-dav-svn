@@ -78,10 +78,6 @@ RUN { \
     echo '  svnadmin create /svn/${SVN_REPOSITORY}'; \
     echo '  svn mkdir -q -m "Creating basic directory structure" file://localhost/svn/${SVN_REPOSITORY}/trunk file://localhost/svn/${SVN_REPOSITORY}/branches file://localhost/svn/${SVN_REPOSITORY}/tags'; \
     echo 'fi'; \
-    echo 'sed -i "s/\(SVNListParentPath\) .*/\1 off/" /etc/httpd/conf/httpd.conf'; \
-    echo 'if [ ${SVN_LIST_PARENT_PATH,,} = "on" ]; then'; \
-    echo '  sed -i "s/\(SVNListParentPath\) .*/\1 on/" /etc/httpd/conf/httpd.conf'; \
-    echo 'fi'; \
     echo 'if [ -e /svn/passwd ]; then'; \
     echo '  rm -f /svn/passwd'; \
     echo 'fi'; \
@@ -113,7 +109,6 @@ ENV HTTPD_LOG true
 ENV HTTPD_LOG_LEVEL warn
 
 ENV SVN_REPOSITORY dev
-ENV SVN_LIST_PARENT_PATH on
 ENV SVN_USER user1,user2
 ENV SVN_PASSWORD password1,password2
 
