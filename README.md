@@ -1,4 +1,5 @@
 # dav-svn
+Star this repository if it was useful for you.  
 [![Docker Stars](https://img.shields.io/docker/stars/takeyamajp/dav-svn.svg)](https://hub.docker.com/r/takeyamajp/dav-svn/)
 [![Docker Pulls](https://img.shields.io/docker/pulls/takeyamajp/dav-svn.svg)](https://hub.docker.com/r/takeyamajp/dav-svn/)
 [![license](https://img.shields.io/github/license/takeyamajp/docker-dav-svn.svg)](https://github.com/takeyamajp/docker-dav-svn/blob/master/LICENSE)
