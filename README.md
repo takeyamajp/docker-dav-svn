@@ -11,7 +11,7 @@ Star this repository if it is useful for you.
 - [`centos7`](https://github.com/takeyamajp/docker-dav-svn/blob/master/centos7/Dockerfile)
 
 ### Image summary
-    FROM centos:centos8  
+    FROM rockylinux/rockylinux:8  
     MAINTAINER "Hiroki Takeyama"
     
     ENV TIMEZONE Asia/Tokyo
